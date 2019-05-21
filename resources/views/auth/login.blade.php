@@ -1,7 +1,28 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-@section('content')
-<div class="container">
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <login-component
+            forget="{{ route('password.request') }}"
+            submit-url="{{ route('login') }}"
+    >
+    </login-component>
+</div>
+<div class="container" style="display: none">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -70,4 +91,9 @@
         </div>
     </div>
 </div>
-@endsection
+</div>
+
+{{--<!-- Scripts -->--}}
+<script src="{{ asset('js/app.js') }}" defer></script>
+</body>
+</html>
