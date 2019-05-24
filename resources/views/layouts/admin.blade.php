@@ -28,20 +28,31 @@
                     <li>切换主题色</li>
                     <li class="header-download is-available">下载主题</li>
                     <li>帮助</li>
-                    <li><span class="header-lang is-active">中文</span> <span>/</span> <span class="header-lang">En</span></li>
+                    <li><span class="header-lang is-active"> {{ Auth::user()->name }}</span> <span>/</span> <span class="header-lang">
+                            <a href="{{ route('logout') }}"  onclick="event.preventDefault();  document.getElementById('logout-form').submit();"> {{ __('退出') }} </a>
+                        </span></li>
                 </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </el-header>
             <el-container>
-                <el-aside width="200px">Aside</el-aside>
+                <el-aside>
+                    @include('layouts._left_admin')
+                </el-aside>
                 <el-container>
-                    <el-main>Main</el-main>
-                    <el-footer>Footer</el-footer>
+                    <el-main>
+                        <el-row class="mainh">
+                        @yield('content')
+                        </el-row>
+                    </el-main>
+                    {{--<el-footer>Footer</el-footer>--}}
                 </el-container>
             </el-container>
         </el-container>
 
     </div>
-
+    @yield('scripts')
 
     <style>
         .el-header, .el-footer {
@@ -51,19 +62,19 @@
             line-height: 60px;
 
         }
+        .mainh{ padding: 15px; background: #fff;}
 
         .el-aside {
-            background-color: #D3DCE6;
+           /* background-color: #D3DCE6;*/
             color: #333;
-            text-align: center;
-            line-height: 200px;
+            width: auto !important;
         }
 
         .el-main {
             background-color: #E9EEF3;
             color: #333;
-            text-align: center;
-            line-height: 160px;
+            height: 800px;
+
         }
 
         body > .el-container {
@@ -98,7 +109,7 @@
             display: inline-block;
             vertical-align: middle;
         }
-        .
+        .header-operations a{ color: #fff;}
     </style>
 </body>
 </html>

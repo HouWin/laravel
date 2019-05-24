@@ -27,9 +27,11 @@ class LoginController extends Controller
      *
      * @var string
      */
-     protected $redirectTo = '/loginAuth';
+   // protected $redirectTo = '/loginAuth';
 
+    protected function redirectTo(){
 
+    }
     /**
      * Create a new controller instance.
      *
@@ -42,10 +44,10 @@ class LoginController extends Controller
 
 
 
-//    public function authenticated(Request $request, $user)
-//    {
-//        if(Auth::attempt(['email'=>$user->email,'password'=>$user->password])){
-//            return array('msg'=>'success');
-//        }
-//    }
+    public function authenticated(Request $request, $user)
+    {
+        if(Auth::attempt(['email'=>$user->email,'password'=>$user->password])){
+            return array('msg'=>'success');
+        }
+    }
 }

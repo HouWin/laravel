@@ -25,7 +25,10 @@ Vue.use(ElemntUi);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('login-component', require('./components/loginComponent.vue').default);
-
+Vue.component('menu-component', require('./components/menuComponent.vue').default);
+Vue.component('add-shop-component', require('./components/addShopComponent.vue').default);
+Vue.component('up-shop-component', require('./components/upShopComponent.vue').default);
+Vue.component('add-goods-component', require('./components/addGoodsComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

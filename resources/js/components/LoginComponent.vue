@@ -69,13 +69,15 @@
                 axios.post(
                     this.submitUrl,
                     formData).then((response) =>{
-                    console.log(response.data)
+                        console.log(response.data);
+                    window.location.href="/home";
                 }).catch((error)=>{
                     if (error.response) {
-                        let err=error.response.data.errors;
-                        this.$message.error('用户名或者密码错误！');
+                        let err=error.response.data.errors.email[0];
+                        console.log(err);
+                        this.$message.error(err);
                     }
-                    console.log(error);
+
                 })
             }
 
