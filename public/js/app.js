@@ -56859,12 +56859,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
       uploadUrl: '',
+      id: '',
       form: {
         goods_name: '',
         goods_price: '',
@@ -56923,6 +56925,7 @@ __webpack_require__.r(__webpack_exports__);
       var this_ = this;
       axios.post(this.suburl, formdata).then(function (response) {
         if (response.status == '201') {
+          this_.id = response.data.id;
           this_.$refs.upload.submit();
         }
       })["catch"](function (error) {
@@ -56942,6 +56945,12 @@ __webpack_require__.r(__webpack_exports__);
     headers: function headers() {
       return {
         'X-CSRF-TOKEN': this.csrfToken
+      };
+    },
+    filesubdata: function filesubdata() {
+      return {
+        'id': this.id,
+        'type': 'goods_storage'
       };
     }
   }
@@ -57219,8 +57228,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('password', this.ruleForm2.password);
       formData.append('remember', this.ruleForm2.remember);
       axios.post(this.submitUrl, formData).then(function (response) {
-        console.log(response.data);
-        window.location.href = "/home";
+        console.log(response.data); // window.location.href="/home";
       })["catch"](function (error) {
         if (error.response) {
           var err = error.response.data.errors.email[0];
@@ -93826,7 +93834,9 @@ var render = function() {
                 _vm._v("首页")
               ]),
               _vm._v(" "),
-              _c("el-breadcrumb-item", [_vm._v("新增商品库")])
+              _c("el-breadcrumb-item", [
+                _vm._v("新增商品库" + _vm._s(_vm.uploadurl))
+              ])
             ],
             1
           )
@@ -93928,6 +93938,7 @@ var render = function() {
                       ref: "upload",
                       attrs: {
                         action: _vm.uploadurl,
+                        data: _vm.filesubdata,
                         "list-type": "picture-card",
                         "on-preview": _vm.handlePictureCardPreview,
                         "on-remove": _vm.handleRemove,

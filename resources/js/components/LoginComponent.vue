@@ -70,7 +70,7 @@
                     this.submitUrl,
                     formData).then((response) =>{
                         console.log(response.data);
-                    window.location.href="/home";
+                   // window.location.href="/home";
                 }).catch((error)=>{
                     if (error.response) {
                         let err=error.response.data.errors.email[0];

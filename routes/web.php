@@ -34,3 +34,4 @@ Route::middleware('auth')->group(function(){
     Route::post('/goods/createResult','GoodsController@store')->name('createGoodsResult');
     Route::post('/file/upload','FileController@add')->name('upload');
 });
+

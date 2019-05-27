@@ -4,7 +4,7 @@
         <el-col :span="24">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>新增商品库</el-breadcrumb-item>
+                <el-breadcrumb-item>新增商品库{{uploadurl}}</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
 
@@ -25,7 +25,8 @@
             <el-form-item label="图片">
                 <el-upload
                         ref="upload"
-                        v-bind:action="uploadurl"
+                        :action="uploadurl"
+                        :data="filesubdata"
                         list-type="picture-card"
                         :on-preview="handlePictureCardPreview"
                         :on-remove="handleRemove"
@@ -57,6 +58,7 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 uploadUrl:'',
+                id:'',
                 form: {
                     goods_name: '',
                     goods_price: '',
@@ -81,6 +83,7 @@
                 }
             }
         },
+
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -97,8 +100,8 @@
             },submitformsen(formdata){
                 let this_=this;
                 axios.post(this.suburl,formdata).then(function (response) {
-
                     if(response.status=='201'){
+                        this_.id=response.data.id;
                         this_.$refs.upload.submit();
                     }
                 }).catch(function (error) {
@@ -119,6 +122,12 @@
             headers(){
                 return {
                     'X-CSRF-TOKEN':this.csrfToken
+                }
+            },
+            filesubdata(){
+                return {
+                    'id':this.id,
+                    'type':'goods_storage'
                 }
             }
         }
