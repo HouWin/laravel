@@ -5,22 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use mysql_xdevapi\Exception;
 
 class FileController extends Controller
 {
     //
     public function add(Request $request){
-         if(empty($request->id) or empty($request->type)){
-                new \Exception('错误');
-         }
-        $path = $request->file('file')->store('public/goods');
+         $path = $request->file('file')->store('public/goods');
+         return $path;
+    }
 
-         $model=new \App\Model\File();
-         $model->yid=$request->id;
-         $model->type=$request->type;
-         $model->file_path=$path;
-         $model->save();
+    public function createDbData(Request $request){
 
-        return $path;
+        $yid=$request->id;
+        $type=$request->type;
+        foreach ($request->fileList as $val){
+            $data[]= array(
+                'yid'=>$yid,
+                'type'=>$type,
+                'file_path'=>$val
+            );
+        }
+
+        $file=new \App\Model\File();
+        $relust=$file->insertAll($data);
+        if($relust)
+        {
+            return ['msg'=>'success'];
+        }else
+        {
+            throw  new Exception('建立关系失败');
+        }
+
     }
 }

@@ -4,7 +4,7 @@
         <el-col :span="24">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>新增商品库{{uploadurl}}</el-breadcrumb-item>
+                <el-breadcrumb-item>新增商品库{{uploadUrl}}</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
 
@@ -30,8 +30,10 @@
                         list-type="picture-card"
                         :on-preview="handlePictureCardPreview"
                         :on-remove="handleRemove"
-                        :auto-upload="false"
+                        :multiple="true"
                         :headers="headers"
+                        :on-success="onsuccess"
+                        :on-error="errorIm"
                         >
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -58,6 +60,7 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 uploadUrl:'',
+                uploadImgList:[],
                 id:'',
                 form: {
                     goods_name: '',
@@ -99,10 +102,11 @@
                 this.$refs[formName].resetFields();
             },submitformsen(formdata){
                 let this_=this;
+                console.log(this.uploadImgList);
                 axios.post(this.suburl,formdata).then(function (response) {
                     if(response.status=='201'){
                         this_.id=response.data.id;
-                        this_.$refs.upload.submit();
+                        this_.filetodbajax();
                     }
                 }).catch(function (error) {
                     console.log(error)
@@ -113,11 +117,31 @@
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
+            },onsuccess(response, file, fileList){
+                this.uploadImgList.push(response);
+            },filetodbajax(){
+                let data={
+                    'id':this.id,
+                    'type':'goods_storage',
+                    'fileList':this.uploadImgList
+                }
+                axios.post(this.filetodb,data).then(function (response) {
+                    if(response.status=='201'){
+                        console.log(response);
+                    }
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },errorIm(err, file, fileList){
+                this.$notify.error({
+                    title: '错误',
+                    message: '文件上传失败'
+                });
             }
 
 
         },
-        props:['suburl','uploadurl','csrfToken'],
+        props:['suburl','uploadurl','csrfToken','filetodb'],
         computed:{
             headers(){
                 return {
@@ -126,7 +150,6 @@
             },
             filesubdata(){
                 return {
-                    'id':this.id,
                     'type':'goods_storage'
                 }
             }
