@@ -30,10 +30,16 @@ Route::middleware('auth')->group(function(){
     Route::get('/editShop/{id}','ShopController@edit')->name('editShop');
     Route::get('/shopInfo/{shop}','ShopController@shopInfo')->name('shopInfo');
     Route::post('/upShop/{shop}','ShopController@upShop')->name('upShop');
+
     Route::get('/goods/create','GoodsController@create')->name('createGoods');
     Route::post('/goods/createResult','GoodsController@store')->name('createGoodsResult');
+    Route::get('/goods/list','GoodsController@index')->name('GoodsList');
+    Route::get('/goods/up/{id}','GoodsController@edit')->name("goodsEdit");
+    Route::get('/goods/show/{id}','GoodsController@show')->name('goodsShow');
+    Route::post('/goods/update/{id}','GoodsController@update')->name("goodsUpdate");
+
     Route::post('/file/upload','FileController@add')->name('upload');
     Route::post('/file/createDbData','FileController@createDbData')->name('createDbData');
-
+    Route::post('/delete/file/{id}','FileController@delete');
 });
 

@@ -11,7 +11,7 @@ class FileController extends Controller
 {
     //
     public function add(Request $request){
-         $path = $request->file('file')->store('public/goods');
+         $path = $request->file('file')->store('goods','public');
          return $path;
     }
 
@@ -37,5 +37,12 @@ class FileController extends Controller
             throw  new Exception('建立关系失败');
         }
 
+    }
+
+    public function delete($id){
+        $file=\App\Model\File::find($id);
+        Storage::disk('public')->delete($file->file_path);
+        $file->delete();
+        
     }
 }

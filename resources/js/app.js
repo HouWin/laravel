@@ -29,6 +29,7 @@ Vue.component('menu-component', require('./components/menuComponent.vue').defaul
 Vue.component('add-shop-component', require('./components/addShopComponent.vue').default);
 Vue.component('up-shop-component', require('./components/upShopComponent.vue').default);
 Vue.component('add-goods-component', require('./components/addGoodsComponent.vue').default);
+Vue.component('up-goods-component', require('./components/upGoodsComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

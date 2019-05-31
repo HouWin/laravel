@@ -1,23 +1,34 @@
 <template>
     <div>
-    <el-radio-group v-model="isCollapse" >
 
-        <el-radio-button :label="false">展开</el-radio-button>
-        <el-radio-button :label="true">收起</el-radio-button>
-    </el-radio-group>
-    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" >
+    <el-menu
+            default-active="1-1"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            :collapse="isCollapse"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            :collapse-transition="false"
+        >
         <el-submenu index="1">
             <template slot="title">
                 <i class="el-icon-location"></i>
                 <span slot="title">常用管理</span>
             </template>
             <el-menu-item-group>
-                <span slot="title">博客</span>
-
+                <span slot="title">我的</span>
+                <a href="/myShop">
                 <el-menu-item  index="1-1">
-                   选项1
+                   My Shop
                 </el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
+                </a>
+                <a href="/goods/list">
+                <el-menu-item index="1-2">
+                   Goods Storage
+                </el-menu-item>
+                </a>
             </el-menu-item-group>
             <el-menu-item-group title="分组2">
                 <el-menu-item index="1-3">选项3</el-menu-item>

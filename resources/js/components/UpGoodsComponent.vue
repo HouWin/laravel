@@ -4,7 +4,7 @@
         <el-col :span="24">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>新增商品库</el-breadcrumb-item>
+                <el-breadcrumb-item>修改商品库</el-breadcrumb-item>
             </el-breadcrumb>
         </el-col>
 
@@ -29,11 +29,12 @@
                         :data="filesubdata"
                         list-type="picture-card"
                         :on-preview="handlePictureCardPreview"
-                        :on-remove="handleRemove"
+                        :before-remove="handleRemove"
                         :multiple="true"
                         :headers="headers"
                         :on-success="onsuccess"
                         :on-error="errorIm"
+                        :file-list="fileList"
                         >
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -45,7 +46,7 @@
                 <el-input type="textarea" v-model="form.desc"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('form')">修改</el-button>
                 <el-button @click="resetForm('form')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -62,6 +63,7 @@
                 uploadUrl:'',
                 uploadImgList:[],
                 id:'',
+                fileList:[],
                 form: {
                     goods_name: '',
                     goods_price: '',
@@ -86,7 +88,9 @@
                 }
             }
         },
-
+        created:function(){
+            this.setForm()
+        },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -104,15 +108,37 @@
                 let this_=this;
                 console.log(this.uploadImgList);
                 axios.post(this.suburl,formdata).then(function (response) {
-                    if(response.status=='201'){
+                    if(response.status=='200'){
                         this_.id=response.data.id;
                         this_.filetodbajax();
                     }
                 }).catch(function (error) {
                     console.log(error)
                 })
-            },handleRemove(file, fileList) {
-                console.log(file, fileList);
+            }, async handleRemove(file, fileList) {
+              let da= await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                  axios.post("/delete/file/"+file.id).then(function(response){
+
+                  }).catch(function (err) {
+                      console.log(err);
+                  })
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                     reject('shibai')
+                });
+
             },
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
@@ -137,11 +163,24 @@
                     title: '错误',
                     message: '文件上传失败'
                 });
+            },setForm(){
+                let this_=this;
+                axios.get(this.goodinfo).then(function (response) {
+                    if(response.status=='200'){
+
+                        this_.form=response.data.data
+                        for(let item of response.data.images){
+                            this_.fileList.push({'name':item.file_path,'url':this_.images_path+'storage/'+item.file_path,'id':item.id})
+                        }
+                    }
+                }).catch(function (error) {
+                    console.log(error)
+                })
             }
 
 
         },
-        props:['suburl','uploadurl','csrfToken','filetodb'],
+        props:['suburl','uploadurl','csrfToken','filetodb','goodinfo','images_path'],
         computed:{
             headers(){
                 return {
